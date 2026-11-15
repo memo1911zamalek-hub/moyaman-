@@ -1,81 +1,68 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>تحدي كرة القدم</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="theme-color" content="#08131f">
+  <title>مشوار مصر | لعبة قيادة مصرية</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<canvas id="fx"></canvas>
-<div class="lights"></div>
-<div class="field"></div>
+  <div id="game"></div>
+  <div class="vignette"></div>
 
-<main id="app">
-  <!-- القائمة الرئيسية -->
-  <section id="menu" class="screen show">
-    <div class="ball-wrap"><div class="ball"></div><div class="shadow"></div></div>
-    <h1>تحدي كرة القدم</h1>
-    <p class="sub">خمّن اللاعب، تتبّع الانتقالات، واختبر معلوماتك.</p>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark">م</span><div><b>مشوار مصر</b><small>طريقك… حكايتك</small></div></div>
+    <div class="wallet"><span>جنيه</span><b id="money">250</b><span class="coin">◆</span></div>
+    <button class="icon-btn" id="pauseBtn" aria-label="إيقاف مؤقت">Ⅱ</button>
+  </header>
 
-    <h3>القسم</h3>
-    <div class="chips" id="cats">
-      <button class="chip on" data-v="all">الكل</button>
-      <button class="chip" data-v="guess">خمّن اللاعب</button>
-      <button class="chip" data-v="transfer">الانتقالات</button>
-      <button class="chip" data-v="general">أسئلة عامة</button>
-    </div>
-
-    <h3>المستوى</h3>
-    <div class="chips" id="lvls">
-      <button class="chip on" data-v="0">مختلط</button>
-      <button class="chip" data-v="1">سهل</button>
-      <button class="chip" data-v="2">متوسط</button>
-      <button class="chip" data-v="3">صعب</button>
-    </div>
-
-    <button class="btn main" id="start">ابدأ المباراة</button>
-    <p class="meta" id="count"></p>
-    <p class="meta" id="bestMenu"></p>
+  <section class="hud">
+    <div class="speed-card"><strong id="speed">0</strong><small>كم / س</small></div>
+    <div class="distance-card"><small>المسافة</small><b id="distance">0.0 كم</b></div>
+    <div class="mission-card"><small>هدف المشوار</small><b id="mission">اجمع 100 جنيه</b></div>
   </section>
 
-  <!-- شاشة اللعب -->
-  <section id="game" class="screen">
-    <div class="hud">
-      <div class="stat"><b id="sScore">0</b><span>النقاط</span></div>
-      <div class="stat"><b id="sQ">1/10</b><span>السؤال</span></div>
-      <div class="stat"><b id="sStreak">0</b><span>سلسلة الفوز</span></div>
-    </div>
-    <div class="timer"><i id="bar"></i></div>
+  <div class="toast" id="toast"></div>
 
-    <div class="card3d" id="card">
-      <span class="tag" id="tag"></span>
-      <h2 id="question"></h2>
-      <div class="clues" id="clues"></div>
-      <div class="tools">
-        <button class="tool" id="hintBtn">تلميح</button>
-        <button class="tool" id="fiftyBtn">حذف إجابتين</button>
-      </div>
-      <div class="opts" id="opts"></div>
-      <button class="btn next" id="next">السؤال التالي</button>
-    </div>
+  <section class="start-screen panel" id="startScreen">
+    <div class="eyebrow">أهلاً بيك في الشارع المصري</div>
+    <h1>اربط الحزام…<br><em>وانزل الطريق!</em></h1>
+    <p>سوق على طريق مصر–إسكندرية الصحراوي، تفادى التكاتك والنقل، واجمع الفلوس عشان تطوّر عربيتك.</p>
+    <div class="start-stats"><span>🚕 حركة مرور مصرية</span><span>🪙 مكافآت وجراج</span><span>🌊 كورنيش إسكندرية</span></div>
+    <button class="primary" id="startBtn">ابدأ المشوار <span>←</span></button>
+    <small class="hint">التحكم: الأسهم أو A / D — وعلى الهاتف اسحب يمين وشمال</small>
   </section>
 
-  <!-- النتيجة -->
-  <section id="end" class="screen">
-    <div class="trophy">🏆</div>
-    <h1 id="endTitle"></h1>
-    <p class="big" id="endScore"></p>
-    <p class="sub" id="endInfo"></p>
-    <p class="meta" id="bestEnd"></p>
-    <button class="btn main" id="again">العب مرة أخرى</button>
-    <button class="btn ghost" id="home">القائمة الرئيسية</button>
+  <section class="panel menu-panel hidden" id="menuPanel">
+    <button class="close" data-close>×</button>
+    <div class="eyebrow">اختار مشوارك</div><h2 id="panelTitle">الجراج والمتجر</h2>
+    <div id="panelContent"></div>
   </section>
-</main>
 
-<script src="data.js"></script>
-<script src="script.js"></script>
+  <nav class="bottom-nav">
+    <button data-panel="garage"><span>🚘</span>الجراج</button>
+    <button data-panel="shop"><span>🛒</span>المتجر</button>
+    <button data-panel="maps"><span>🗺️</span>الطرق</button>
+    <button data-panel="sound"><span>🔊</span>الصوت</button>
+  </nav>
+
+  <div class="touch-controls" id="touchControls">
+    <button id="leftBtn">◀</button><button id="rightBtn">▶</button>
+  </div>
+
+  <div class="pause-screen hidden" id="pauseScreen">
+    <div class="panel pause-panel"><div class="eyebrow">استراحة محارب</div><h2>واقف على جنب؟</h2>
+      <button class="primary" id="resumeBtn">كمّل المشوار</button>
+      <button class="secondary" id="restartBtn">ابدأ من جديد</button>
+    </div>
+  </div>
+  <div class="gameover hidden" id="gameOver">
+    <div class="panel pause-panel"><div class="eyebrow">المشوار خلص</div><h2>سلامتك يا سواق!</h2><p id="resultText">جمعت 0 جنيه</p>
+      <button class="primary" id="againBtn">مشوار جديد</button>
+    </div>
+  </div>
+
+  <script type="module" src="game.js"></script>
 </body>
 </html>
