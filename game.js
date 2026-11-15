@@ -1,117 +1,105 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
 
-const $ = id => document.getElementById(id);
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x91b9c0);
-scene.fog = new THREE.Fog(0x91b9c0, 45, 190);
-const camera = new THREE.PerspectiveCamera(62, innerWidth/innerHeight, .1, 350);
-camera.position.set(0, 6.4, 11.5);
-camera.lookAt(0, 1, -12);
-const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
-renderer.setPixelRatio(Math.min(devicePixelRatio, 1.8));
-renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-$('game').appendChild(renderer.domElement);
-scene.add(new THREE.HemisphereLight(0xe8f8ff,0x69705b,2.0));
-const sun = new THREE.DirectionalLight(0xfff0d3,2.2); sun.position.set(-25,35,15); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); scene.add(sun);
+const canvas=document.querySelector('#game');
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x91c8df);
+scene.fog=new THREE.Fog(0x91c8df,45,190);
+const camera=new THREE.PerspectiveCamera(62,innerWidth/innerHeight,.1,350);
+camera.position.set(0,6.8,12.5); camera.lookAt(0,0,-12);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setSize(innerWidth,innerHeight);
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.12;
+scene.add(new THREE.HemisphereLight(0xd9f3ff,0x6c5944,2.1));
+const sun=new THREE.DirectionalLight(0xffefcf,2.5);sun.position.set(-15,28,10);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);scene.add(sun);
 
-const mat=(color,roughness=.85)=>new THREE.MeshStandardMaterial({color,roughness});
-const asphalt=mat(0x343a3c), sand=mat(0xc4a16d), white=mat(0xf2ead5), dark=mat(0x18232a), glass= new THREE.MeshStandardMaterial({color:0x8bc3d1,roughness:.2,metalness:.15});
-const road = new THREE.Mesh(new THREE.PlaneGeometry(16,260),asphalt); road.rotation.x=-Math.PI/2; road.position.set(0,-.08,-95); road.receiveShadow=true; scene.add(road);
-const ground=new THREE.Mesh(new THREE.PlaneGeometry(500,300),sand); ground.rotation.x=-Math.PI/2; ground.position.set(0,-.15,-100); scene.add(ground);\n// Corniche scenery: sea strip and promenade, hidden on the desert highway.\nconst sea=new THREE.Mesh(new THREE.PlaneGeometry(65,300),new THREE.MeshStandardMaterial({color:0x168eae,roughness:.28,metalness:.08})); sea.rotation.x=-Math.PI/2; sea.position.set(-47,-.12,-100); sea.visible=false; scene.add(sea);\nconst promenade=new THREE.Mesh(new THREE.BoxGeometry(5,.18,300),mat(0xd8c7a1)); promenade.position.set(-13,-.02,-100); promenade.visible=false; scene.add(promenade);\nconst seaLine=new THREE.Mesh(new THREE.BoxGeometry(.35,.25,300),mat(0xf3eee0)); seaLine.position.set(-15.5,.08,-100); seaLine.visible=false; scene.add(seaLine);
+const mat=(color,rough=.8)=>new THREE.MeshStandardMaterial({color,roughness:rough});
+const asphalt=mat(0x30343a),sand=mat(0xbca47b),white=mat(0xf1eee3),black=mat(0x171b20),yellow=mat(0xe5b53d),green=mat(0x427b56);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(400,400),sand);ground.rotation.x=-Math.PI/2;ground.position.y=-.12;ground.receiveShadow=true;scene.add(ground);
+const road=new THREE.Mesh(new THREE.PlaneGeometry(13,260),asphalt);road.rotation.x=-Math.PI/2;road.position.set(0,0,-95);road.receiveShadow=true;scene.add(road);
+for(let x of [-6.6,6.6]){let edge=new THREE.Mesh(new THREE.BoxGeometry(.18,.12,260),white);edge.position.set(x,.05,-95);scene.add(edge)}
 const laneMarks=[];
-for(let z=18;z>-230;z-=10){for(let x of [-2.65,2.65]){const m=new THREE.Mesh(new THREE.BoxGeometry(.13,.025,4.8),white);m.position.set(x,.01,z);scene.add(m);laneMarks.push(m)}}
-for(let x of [-7.8,7.8]){const line=new THREE.Mesh(new THREE.BoxGeometry(.16,.03,260),white);line.position.set(x,.01,-95);scene.add(line)}
-// Distant roadside desert, palms, signs and buildings.
-const scenery=[];
-function palm(x,z,scale=1){const g=new THREE.Group();const trunk=new THREE.Mesh(new THREE.CylinderGeometry(.12*scale,.2*scale,3.5*scale,7),mat(0x795638));trunk.position.y=1.75*scale;g.add(trunk);for(let i=0;i<7;i++){let leaf=new THREE.Mesh(new THREE.ConeGeometry(.22*scale,2.3*scale,5),mat(0x426b48));leaf.position.set(Math.sin(i*Math.PI/3.5)*.75*scale,3.3*scale,Math.cos(i*Math.PI/3.5)*.75*scale);leaf.rotation.z=Math.cos(i*Math.PI/3.5)*.8;leaf.rotation.x=Math.sin(i*Math.PI/3.5)*.8;g.add(leaf)}g.position.set(x,0,z);scene.add(g);scenery.push(g)}
-for(let z=15;z>-230;z-=27){palm(-11,z,.8);palm(11,z-10,.9)}
-function sign(x,z,label){const g=new THREE.Group();let pole=new THREE.Mesh(new THREE.BoxGeometry(.15,3,.15),dark);pole.position.y=1.5;g.add(pole);let board=new THREE.Mesh(new THREE.BoxGeometry(3.5,1.05,.16),mat(0x17634f));board.position.y=3.05;g.add(board);let canvas=document.createElement('canvas');canvas.width=512;canvas.height=150;let c=canvas.getContext('2d');c.fillStyle='#17634f';c.fillRect(0,0,512,150);c.fillStyle='white';c.font='bold 46px Arial';c.textAlign='center';c.fillText(label,256,92);let tex=new THREE.CanvasTexture(canvas);let face=new THREE.Mesh(new THREE.PlaneGeometry(3.35,.95),new THREE.MeshBasicMaterial({map:tex}));face.position.set(0,3.05,.09);g.add(face);g.position.set(x,0,z);scene.add(g);scenery.push(g)}
-sign(-10,-36,'الإسكندرية ←');sign(10,-112,'طريق القاهرة');
+for(let z=-220;z<20;z+=10){for(let x of [-2.15,2.15]){let m=new THREE.Mesh(new THREE.BoxGeometry(.13,.025,4.8),white);m.position.set(x,.04,z);scene.add(m);laneMarks.push(m)}}
+const sideObjects=[];
+function building(x,z,w,h,color){let b=new THREE.Mesh(new THREE.BoxGeometry(w,h,5),mat(color));b.position.set(x,h/2-.1,z);b.castShadow=true;scene.add(b);for(let y=1.1;y<h-.5;y+=1.4)for(let xx=-w/2+.7;xx<w/2-.3;xx+=1.2){let win=new THREE.Mesh(new THREE.PlaneGeometry(.55,.65),mat(0x8bc2d0,.3));win.position.set(x+xx,y,z-2.51);scene.add(win)}sideObjects.push(b)}
+for(let i=0;i<24;i++){let z=-i*11-8;building(-11-Math.random()*3,z,4+Math.random()*4,4+Math.random()*8,[0xd2b28a,0xc8c1ad,0xb0a28f][i%3]);if(i%2===0)building(11+Math.random()*3,z-4,4,4+Math.random()*7,[0xd4c3a4,0xb5b7aa][i%2])}
+function palm(x,z){let trunk=new THREE.Mesh(new THREE.CylinderGeometry(.18,.28,3.8,7),mat(0x79553b));trunk.position.set(x,1.8,z);scene.add(trunk);for(let i=0;i<7;i++){let leaf=new THREE.Mesh(new THREE.ConeGeometry(.22,3.5,5),mat(0x34784b));leaf.position.set(x+Math.cos(i)*1.2,3.8,z+Math.sin(i)*1.2);leaf.rotation.z=Math.PI/2.8;leaf.rotation.y=i;scene.add(leaf)}}
+for(let z=-10;z>-230;z-=19){palm(-8.7,z);if(z%2===0)palm(8.7,z-8)}
 
-let player, playerColor=0xe84d35, tint=0.25, carIndex=0, currentMap='desert';
-const owned=new Set([0]); let money=250, totalCoins=0, distance=0, speed=0, running=false, paused=false, crashed=false;
+function plate(parent){let p=new THREE.Group();let base=new THREE.Mesh(new THREE.BoxGeometry(.78,.23,.045),mat(0xf1e9d2));p.add(base);let line=new THREE.Mesh(new THREE.BoxGeometry(.72,.035,.012),mat(0x1d2934));line.position.y=-.045;p.add(line);let side=new THREE.Mesh(new THREE.BoxGeometry(.13,.17,.02),mat(0x2677aa));side.position.x=-.31;p.add(side);p.position.set(0,.48,-.91);parent.add(p)}
+function makeCar(color=0xc82b2b,type='sedan'){
+ const g=new THREE.Group();const body=new THREE.Mesh(new THREE.BoxGeometry(type==='truck'?1.65:1.55,.62,type==='tuktuk'?1.65:2.7),mat(color,.35));body.position.y=.65;body.castShadow=true;g.add(body);
+ const cabin=new THREE.Mesh(new THREE.BoxGeometry(type==='truck'?1.48:.1+1.28,.62,type==='truck'?1.3:1.45),mat(type==='tuktuk'?0x1c9b76:0x9dbac5,.25));cabin.position.set(0,1.18,type==='truck'?.28:-.12);cabin.castShadow=true;g.add(cabin);
+ if(type==='truck'){const cargo=new THREE.Mesh(new THREE.BoxGeometry(1.7,.8,1.3),mat(0xb7a17d));cargo.position.set(0,1.12,.95);g.add(cargo)}
+ const wheels=[];for(let x of [-.83,.83])for(let z of [-.85,.85]){let w=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,.19,12),black);w.rotation.z=Math.PI/2;w.position.set(x,.35,z);w.castShadow=true;g.add(w);wheels.push(w)}
+ for(let x of [-.48,.48]){let l=new THREE.Mesh(new THREE.BoxGeometry(.3,.16,.05),mat(0xfff0c7));l.position.set(x,.7,-1.37);g.add(l)}
+ plate(g);g.userData.wheels=wheels;g.userData.type=type;return g;
+}
+const player=makeCar(0xd52e2e);player.position.set(0,0,5);scene.add(player);
+let traffic=[],distance=0,money=0,speed=24,playing=false,paused=false,earned=0,spawn=0,roadMode='highway';
+const moneyEl=document.querySelector('#money'),distEl=document.querySelector('#distance');
 const cars=[
- {name:'فيات 128',emoji:'🚗',price:0,color:0xd94c3d,acc:1},
- {name:'لانسر',emoji:'🚙',price:350,color:0x265a87,acc:1.08},
- {name:'هيونداي إلنترا',emoji:'🚘',price:700,color:0xdddddc,acc:1.12},
- {name:'نص نقل',emoji:'🛻',price:950,color:0xdaa94c,acc:.94},
- {name:'كوبيه رياضية',emoji:'🏎️',price:1500,color:0x7a44a8,acc:1.3}
+ {name:'تاكسي أبيض',emoji:'🚕',type:'sedan',color:0xe8dfc7},
+ {name:'نص نقل',emoji:'🚚',type:'truck',color:0x5e9a71},
+ {name:'توك توك',emoji:'🛺',type:'tuktuk',color:0x169a78},
+ {name:'ملاكي أزرق',emoji:'🚙',type:'sedan',color:0x286b9c},
+ {name:'ميكروباص',emoji:'🚐',type:'van',color:0xd4a83b}
 ];
-function makeCar(color=playerColor,type='sedan',isPlayer=false){
- const g=new THREE.Group(); const bodyMat=mat(color,.45), tireMat=mat(0x101316,.95), hub=mat(0xb7c4c7,.35);
- const body=new THREE.Mesh(new THREE.BoxGeometry(type==='pickup'?2.0:1.9,.65,type==='tuktuk'?2.1:3.4),bodyMat);body.position.y=.75;body.castShadow=true;g.add(body);
- if(type!=='tuktuk'){
-  const cabin=new THREE.Mesh(new THREE.BoxGeometry(1.55,.72,type==='pickup'?1.65:1.8),new THREE.MeshStandardMaterial({color:0x243c4b,roughness:.22,metalness:.1}));cabin.position.set(0,1.38,-.15);cabin.castShadow=true;g.add(cabin);
-  const windshield=new THREE.Mesh(new THREE.BoxGeometry(1.42,.48,.035),new THREE.MeshStandardMaterial({color:0x8bbac7,roughness:.18,transparent:true,opacity:.48}));windshield.position.set(0,1.42,.78);g.add(windshield);
-  if(type==='pickup'){const bed=new THREE.Mesh(new THREE.BoxGeometry(1.75,.25,1.25),mat(0x514b40));bed.position.set(0,1.1,-1.05);g.add(bed)}
- } else {const roof=new THREE.Mesh(new THREE.BoxGeometry(1.6,.12,1.2),mat(0x222b2c));roof.position.set(0,1.8,-.1);g.add(roof);const windshield=new THREE.Mesh(new THREE.BoxGeometry(1.4,.55,.04),glass);windshield.position.set(0,1.35,.55);g.add(windshield)}
- for(const x of [-.92,.92])for(const z of [-1.05,1.05]){let w=new THREE.Mesh(new THREE.CylinderGeometry(.34,.34,.18,14),tireMat);w.rotation.z=Math.PI/2;w.position.set(x,.4,z);w.castShadow=true;g.add(w);let h=new THREE.Mesh(new THREE.CylinderGeometry(.14,.14,.19,12),hub);h.rotation.z=Math.PI/2;h.position.copy(w.position);g.add(h)}
- // Egyptian-style white plate with Arabic numerals/letters, visual prop.
- const plate=new THREE.Mesh(new THREE.BoxGeometry(.75,.22,.035),mat(0xf5f2e8));plate.position.set(0,.72,1.73);g.add(plate);
- const pcan=document.createElement('canvas');pcan.width=256;pcan.height=72;const pctx=pcan.getContext('2d');pctx.fillStyle='#f8f7ed';pctx.fillRect(0,0,256,72);pctx.fillStyle='#142a42';pctx.font='bold 30px Arial';pctx.textAlign='center';pctx.fillText('مصر  ١٢٣٤',128,47);const pt=new THREE.CanvasTexture(pcan);const pn=new THREE.Mesh(new THREE.PlaneGeometry(.7,.18),new THREE.MeshBasicMaterial({map:pt}));pn.position.set(0,.72,1.752);g.add(pn);
- if(isPlayer){g.userData.bodyMaterial=bodyMat;g.userData.cabin=cabinRef(g);g.userData.tintMeshes=[];g.traverse(o=>{if(o.isMesh && o.material && o.material.color && o.material.color.getHex()===0x243c4b)g.userData.tintMeshes.push(o)})}
- return g;
+function spawnTraffic(){let spec=cars[Math.floor(Math.random()*cars.length)],lane=[-4.3,0,4.3][Math.floor(Math.random()*3)];let c=makeCar(spec.color,spec.type);c.position.set(lane,0,-125-Math.random()*20);c.userData.speed=12+Math.random()*13;scene.add(c);traffic.push(c)}
+let keys={left:false,right:false,brake:false};
+function steer(dir){if(!playing||paused)return;player.position.x=THREE.MathUtils.clamp(player.position.x+dir*1.45,-4.65,4.65)}
+addEventListener('keydown',e=>{if(['ArrowLeft','a','A'].includes(e.key))keys.left=true;if(['ArrowRight','d','D'].includes(e.key))keys.right=true;if(e.code==='Space')keys.brake=true;if(e.key==='Escape')togglePause()});
+addEventListener('keyup',e=>{if(['ArrowLeft','a','A'].includes(e.key))keys.left=false;if(['ArrowRight','d','D'].includes(e.key))keys.right=false;if(e.code==='Space')keys.brake=false});
+document.querySelector('#leftBtn').onpointerdown=()=>steer(-1);document.querySelector('#rightBtn').onpointerdown=()=>steer(1);document.querySelector('#brakeBtn').onpointerdown=()=>keys.brake=true;document.querySelector('#brakeBtn').onpointerup=()=>keys.brake=false;
+document.querySelector('#leftBtn').onpointerdown=e=>{e.preventDefault();steer(-1)};document.querySelector('#rightBtn').onpointerdown=e=>{e.preventDefault();steer(1)};
+function update(dt){if(!playing||paused)return;let actual=keys.brake?10: speed;if(keys.left)player.position.x-=dt*7;if(keys.right)player.position.x+=dt*7;player.position.x=THREE.MathUtils.clamp(player.position.x,-4.7,4.7);
+ distance+=actual*dt*.7;distEl.textContent=Math.floor(distance);spawn-=dt;if(spawn<=0){spawnTraffic();spawn=1.15+Math.random()*.65}
+ laneMarks.forEach(m=>{m.position.z+=actual*dt;if(m.position.z>15)m.position.z=-230});
+ traffic.forEach((c,i)=>{c.position.z+= (actual-c.userData.speed)*dt;if(c.position.z>16){scene.remove(c);traffic.splice(i,1);money+=3;earned+=3;moneyEl.textContent=money}});
+ for(let c of traffic){if(Math.abs(c.position.z-player.position.z)<1.7&&Math.abs(c.position.x-player.position.x)<1.35){endGame();break}}
+ camera.position.x+=(player.position.x*.18-camera.position.x)*dt*2;camera.lookAt(player.position.x*.12,.4,-14);
 }
-function cabinRef(g){return g.children.find(o=>o.geometry?.type==='BoxGeometry'&&o.position.y>1.2)}
-function makePlayer(){if(player)scene.remove(player);let type=carIndex===3?'pickup':'sedan';player=makeCar(cars[carIndex].color,type,true);player.position.set(0,0,4);scene.add(player);applyTint()}
-makePlayer();
-function applyTint(){if(!player)return;player.traverse(o=>{if(o.isMesh&&o.position.y>1.2&&o.material?.color){o.material.color.set(tint>.7?0x070b10:tint>.4?0x26313a:0x547987);o.material.transparent=tint>.35;o.material.opacity=1-tint*.38}})}
-const traffic=[], coins=[];
-function spawnTraffic(){const lane=[-5.3,-2.65,0,2.65,5.3][Math.floor(Math.random()*5)];let r=Math.random();let type=r<.22?'tuktuk':r<.45?'pickup':'sedan';let color=[0xd9d9d1,0x246b9b,0xc94d37,0xd4a63f,0x4d6652][Math.floor(Math.random()*5)];let v=makeCar(color,type);v.position.set(lane,0,-145);v.userData.type=type;v.userData.speed=type==='tuktuk'?10+Math.random()*5:13+Math.random()*10;scene.add(v);traffic.push(v)}
-function spawnCoin(){let m=new THREE.Mesh(new THREE.TorusGeometry(.42,.13,8,16),mat(0xffd166,.3));m.position.set([-5.3,-2.65,0,2.65,5.3][Math.floor(Math.random()*5)],1,-145);m.rotation.x=Math.PI/2;m.userData.spin=true;scene.add(m);coins.push(m)}
-let spawnTimer=0,coinTimer=0;
-const keys={left:false,right:false};
-function steer(dir){if(!running||paused)return;player.position.x=THREE.MathUtils.clamp(player.position.x+dir*1.1,-6.1,6.1);playBeep(210+dir*50,.045)}
-addEventListener('keydown',e=>{if(['ArrowLeft','a','A'].includes(e.key))keys.left=true;if(['ArrowRight','d','D'].includes(e.key))keys.right=true;if(e.key==='Escape')togglePause()});
-addEventListener('keyup',e=>{if(['ArrowLeft','a','A'].includes(e.key))keys.left=false;if(['ArrowRight','d','D'].includes(e.key))keys.right=false});
-$('leftBtn').addEventListener('pointerdown',e=>{e.preventDefault();keys.left=true});$('leftBtn').addEventListener('pointerup',()=>keys.left=false);$('rightBtn').addEventListener('pointerdown',e=>{e.preventDefault();keys.right=true});$('rightBtn').addEventListener('pointerup',()=>keys.right=false);
-let touchX=null;renderer.domElement.addEventListener('pointerdown',e=>touchX=e.clientX);renderer.domElement.addEventListener('pointerup',e=>{if(touchX!==null&&Math.abs(e.clientX-touchX)>22)steer(e.clientX>touchX?1:-1);touchX=null});
-let audioCtx=null, soundOn=true;
-function playBeep(freq=320,duration=.08){if(!soundOn)return;try{audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=freq;g.gain.setValueAtTime(.045,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+duration);o.connect(g);g.connect(audioCtx.destination);o.start();o.stop(audioCtx.currentTime+duration)}catch(e){}}
-function honk(){playBeep(390,.18);setTimeout(()=>playBeep(310,.16),100)}
-function toast(t){$('toast').textContent=t;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1800)}
-function updateWallet(){$('money').textContent=money}
-function start(){ $('startScreen').classList.add('hidden');running=true;paused=false;crashed=false;distance=0;speed=0;spawnTimer=0;coinTimer=0;last=performance.now();toast('يلا بينا… خليك مركز!');}
-$('startBtn').onclick=()=>{start();audioCtx ||= new (window.AudioContext||window.webkitAudioContext)();honk()};
-function togglePause(){if(!running)return;paused=!paused;$('pauseScreen').classList.toggle('hidden',!paused)}
-$('pauseBtn').onclick=togglePause;$('resumeBtn').onclick=()=>{paused=false;$('pauseScreen').classList.add('hidden')};
-function endGame(){running=false;crashed=true;money+=Math.floor(distance/100);updateWallet();$('resultText').textContent=`قطعت ${(distance/1000).toFixed(1)} كم — مكافأة ${Math.floor(distance/100)} جنيه`; $('gameOver').classList.remove('hidden');honk()}
-$('restartBtn').onclick=()=>{$('pauseScreen').classList.add('hidden');resetWorld();start()};
-$('againBtn').onclick=()=>{$('gameOver').classList.add('hidden');resetWorld();start()};
-function resetWorld(){traffic.forEach(o=>scene.remove(o));coins.forEach(o=>scene.remove(o));traffic.length=0;coins.length=0;player.position.set(0,0,4)}
-function setMap(map){currentMap=map;const bySea=map==='corniche';sea.visible=bySea;promenade.visible=bySea;seaLine.visible=bySea;ground.material=bySea?mat(0xc9b18a):sand;scene.background.set(bySea?0x77b9ce:0x91b9c0);scene.fog.color.set(bySea?0x77b9ce:0x91b9c0);toast(bySea?'فتحت طريق كورنيش إسكندرية! 🌊':'رجعنا لطريق مصر–إسكندرية')}
-function buildPanel(kind){
- const panel=$('menuPanel'),content=$('panelContent');panel.classList.remove('hidden');let title='';
- if(kind==='garage'){title='الجراج والتعديل';content.innerHTML=`<div class="custom-row"><label>لون العربية</label><input id="paint" type="color" value="#${cars[carIndex].color.toString(16).padStart(6,'0')}"></div><div class="custom-row"><label>تضليل الزجاج</label><input id="tint" type="range" min="0" max="100" value="${Math.round(tint*100)}"></div><div class="custom-row"><label>العربية الحالية</label><b>${cars[carIndex].name}</b></div><button class="action-btn" id="hornBtn">جرّب الكلاكس المصري 📢</button>`;setTimeout(()=>{$('paint').oninput=e=>{player.userData.bodyMaterial.color.set(e.target.value)};$('tint').oninput=e=>{tint=e.target.value/100;applyTint()};$('hornBtn').onclick=honk},0)}
- if(kind==='shop'){title='معرض العربيات';content.innerHTML='<div class="shop-grid">'+cars.map((c,i)=>`<div class="shop-item"><div class="car-icon">${c.emoji}</div><b>${c.name}</b><small>${c.price===0?'متاحة معاك':c.price+' جنيه'}</small><button data-car="${i}" ${owned.has(i)?'':' '}>${owned.has(i)?(carIndex===i?'مختارة':'اختارها'):'شراء'}</button></div>`).join('')+'</div>';setTimeout(()=>content.querySelectorAll('[data-car]').forEach(b=>b.onclick=()=>{let i=+b.dataset.car,c=cars[i];if(!owned.has(i)){if(money<c.price){toast('فلوسك مش كفاية… اجمع عملات أكتر');return}money-=c.price;owned.add(i);updateWallet();toast('مبروك! العربية بقت ملكك 🚘')}carIndex=i;playerColor=c.color;makePlayer();buildPanel('shop')}),0)}
- if(kind==='maps'){title='اختار الطريق';content.innerHTML=`<div class="map-option"><div><b>طريق مصر–إسكندرية الصحراوي</b><small>الطريق الأساسي — مجاني</small></div><button id="desertMap">العب</button></div><div class="map-option"><div><b>كورنيش إسكندرية 🌊</b><small>منظر البحر وممشى الكورنيش — 300 جنيه</small></div><button id="seaMap" ${currentMap==='corniche'?'disabled':''}>${currentMap==='corniche'?'مفتوح': 'افتح الطريق'}</button></div>`;setTimeout(()=>{$('desertMap').onclick=()=>{setMap('desert');panel.classList.add('hidden')};$('seaMap').onclick=()=>{if(money<300){toast('اجمع 300 جنيه عشان تفتح الكورنيش');return}money-=300;updateWallet();setMap('corniche');$('seaMap').disabled=true;$('seaMap').textContent='مفتوح'},0)}
- if(kind==='sound'){title='الصوت والمؤثرات';content.innerHTML=`<div class="custom-row"><label>المؤثرات الصوتية</label><button class="action-btn" id="soundToggle">${soundOn?'شغالة 🔊':'مقفولة 🔇'}</button></div><p style="font-size:12px;color:#bdcbd0;line-height:1.9">اللعبة فيها كلاكس وتنبيهات وأصوات إلكترونية مولّدة داخل المتصفح. أضف ملفات موسيقى تملك حق استخدامها داخل مجلد assets لو حابب تشغّل مهرجاناتك المفضلة.</p>`;setTimeout(()=>$('soundToggle').onclick=()=>{soundOn=!soundOn;$('soundToggle').textContent=soundOn?'شغالة 🔊':'مقفولة 🔇';playBeep()},0)}
- $('panelTitle').textContent=title;
-}
-document.querySelectorAll('[data-panel]').forEach(b=>b.onclick=()=>buildPanel(b.dataset.panel));
-document.querySelector('[data-close]').onclick=()=>$('menuPanel').classList.add('hidden');
+let last=performance.now();function animate(now){requestAnimationFrame(animate);let dt=Math.min((now-last)/1000,.05);last=now;update(dt);renderer.render(scene,camera)}requestAnimationFrame(animate);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+function start(){document.querySelector('#menu').classList.add('hidden');document.querySelector('#gameover').classList.add('hidden');playing=true;paused=false;distance=0;earned=0;spawn=0;traffic.forEach(c=>scene.remove(c));traffic=[];player.position.x=0;document.querySelector('#pause').classList.add('hidden')}
+function endGame(){if(!playing)return;playing=false;money+=earned+Math.floor(distance/20);moneyEl.textContent=money;persist();document.querySelector('#finalDistance').textContent=Math.floor(distance);document.querySelector('#earned').textContent=earned+Math.floor(distance/20);document.querySelector('#gameover').classList.remove('hidden')}
+function togglePause(){if(!playing)return;paused=!paused;document.querySelector('#pause').classList.toggle('hidden',!paused)}
+document.querySelector('#startBtn').onclick=start;document.querySelector('#againBtn').onclick=start;document.querySelector('#pauseBtn').onclick=togglePause;document.querySelector('#resumeBtn').onclick=togglePause;document.querySelector('#quitBtn').onclick=()=>{playing=false;paused=false;document.querySelector('#pause').classList.add('hidden');document.querySelector('#menu').classList.remove('hidden')};document.querySelector('#homeBtn').onclick=()=>{document.querySelector('#gameover').classList.add('hidden');document.querySelector('#menu').classList.remove('hidden')};
 
-let last=performance.now(),accum=0;
-function animate(now){requestAnimationFrame(animate);let dt=Math.min((now-last)/1000,.04);last=now;
- if(running&&!paused){
-  speed=THREE.MathUtils.lerp(speed,92,.018);distance+=speed*dt/3.6*10;
-  if(keys.left)player.position.x=Math.max(-6.1,player.position.x-8*dt);if(keys.right)player.position.x=Math.min(6.1,player.position.x+8*dt);
-  player.rotation.z=THREE.MathUtils.lerp(player.rotation.z,keys.left?.12:keys.right?-.12:0,.12);
-  accum+=dt*speed/11;
-  laneMarks.forEach(m=>{m.position.z+=speed*dt*.55;if(m.position.z>22)m.position.z-=250});
-  scenery.forEach(s=>{s.position.z+=speed*dt*.45;if(s.position.z>28)s.position.z-=255});
-  spawnTimer+=dt;coinTimer+=dt;if(spawnTimer>1.05){spawnTraffic();spawnTimer=0}if(coinTimer>2.6){spawnCoin();coinTimer=0}
-  traffic.forEach((o,i)=>{o.position.z+=o.userData.speed*dt*.55+speed*dt*.18;if(o.position.z>20){scene.remove(o);traffic.splice(i,1)}else if(Math.abs(o.position.x-player.position.x)<1.45&&Math.abs(o.position.z-player.position.z)<2.4){endGame()}});
-  coins.forEach((o,i)=>{o.position.z+=speed*dt*.5;o.rotation.z+=dt*2;if(o.position.z>20){scene.remove(o);coins.splice(i,1)}else if(Math.abs(o.position.x-player.position.x)<1.3&&Math.abs(o.position.z-player.position.z)<2){scene.remove(o);coins.splice(i,1);money+=10;totalCoins+=10;updateWallet();playBeep(700,.12);toast('+10 جنيه 🪙')}});
-  $('speed').textContent=Math.round(speed);$('distance').textContent=(distance/1000).toFixed(1)+' كم';
-  if(Math.floor(distance/1000)>=1)$('mission').textContent='ممتاز! كمّل واجمع فلوس';
- }
- camera.position.x=THREE.MathUtils.lerp(camera.position.x,player.position.x*.22,.035);camera.lookAt(player.position.x*.12,1,-12);
- renderer.render(scene,camera);
-}
-requestAnimationFrame(animate);
-addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(Math.min(devicePixelRatio,1.8))});
-updateWallet();
+// Local save, garage and in-game economy
+let saved={};try{saved=JSON.parse(localStorage.getItem('egyptDriveSave')||'{}')}catch(e){}
+let owned=saved.owned||['fiat'],selected=saved.selected||'fiat',ownedRoads=saved.ownedRoads||['highway'],carColor=saved.carColor||'#d92727';
+money=saved.money||0;moneyEl.textContent=money;
+function persist(){localStorage.setItem('egyptDriveSave',JSON.stringify({owned,selected,ownedRoads,carColor,money}))}
+
+const catalog=[
+ {id:'fiat',name:'فيات 128',emoji:'🚗',price:0,color:0xd52e2e},
+ {id:'taxi',name:'تاكسي القاهرة',emoji:'🚕',price:350,color:0xe8dfc7},
+ {id:'pickup',name:'نصف نقل',emoji:'🛻',price:650,color:0x4d946a},
+ {id:'sport',name:'كوبيه رياضية',emoji:'🏎️',price:1200,color:0x286bba},
+ {id:'suv',name:'دفع رباعي',emoji:'🚙',price:1800,color:0x353d49}
+];
+function openPanel(id){document.querySelectorAll('.panel').forEach(p=>p.classList.add('hidden'));document.querySelector('#'+id).classList.remove('hidden')}
+document.querySelectorAll('[data-open]').forEach(b=>b.onclick=()=>{openPanel(b.dataset.open);if(b.dataset.open==='shop')renderShop()});
+document.querySelectorAll('.close').forEach(b=>b.onclick=()=>b.parentElement.classList.add('hidden'));
+function renderShop(){document.querySelectorAll('.moneyInline').forEach(e=>e.textContent=money);let box=document.querySelector('#carShop');box.innerHTML='';catalog.forEach(c=>{let ownedCar=owned.includes(c.id),el=document.createElement('div');el.className='shopitem';el.innerHTML=`<span class="emoji">${c.emoji}</span><div class="info"><b>${c.name}</b><small>${ownedCar?'موجودة في الجراج':`السعر ${c.price} جنيه داخل اللعبة`}</small></div><button ${ownedCar||money<c.price?'disabled':''}>${ownedCar?'مملوكة':`شراء`}</button>`;el.querySelector('button').onclick=()=>{if(money>=c.price&&!ownedCar){money-=c.price;owned.push(c.id);moneyEl.textContent=money;persist();renderShop();renderGarage()}};box.append(el)});
+let roads=[{id:'highway',name:'طريق القاهرة – إسكندرية',emoji:'🛣️',price:0},{id:'corniche',name:'كورنيش إسكندرية',emoji:'🌊',price:500}];let rb=document.querySelector('#roadShop');rb.innerHTML='';roads.forEach(r=>{let has=ownedRoads.includes(r.id),el=document.createElement('div');el.className='shopitem';el.innerHTML=`<span class="emoji">${r.emoji}</span><div class="info"><b>${r.name}</b><small>${has?'مفتوح':'السعر '+r.price+' جنيه داخل اللعبة'}</small></div><button ${has||money<r.price?'disabled':''}>${has?'مفتوح':'شراء'}</button>`;el.querySelector('button').onclick=()=>{if(money>=r.price&&!has){money-=r.price;ownedRoads.push(r.id);moneyEl.textContent=money;persist();renderShop()}};rb.append(el)})}
+function renderGarage(){let sel=document.querySelector('#equippedCar');sel.innerHTML='';catalog.filter(c=>owned.includes(c.id)).forEach(c=>{let o=document.createElement('option');o.value=c.id;o.textContent=c.name;o.selected=c.id===selected;sel.append(o)});let spec=catalog.find(c=>c.id===selected)||catalog[0];document.querySelector('#selectedCarName').textContent=spec.name;document.querySelector('#garageCar').textContent=spec.emoji;document.querySelector('#carColor').value=carColor}
+document.querySelector('#equippedCar').onchange=e=>{selected=e.target.value;let spec=catalog.find(c=>c.id===selected);player.children[0].material.color.set(spec.color);renderGarage();persist()};
+document.querySelector('#carColor').oninput=e=>{carColor=e.target.value;player.children[0].material.color.set(carColor)};
+document.querySelector('#tint').onchange=e=>{player.children[1].material.color.set(e.target.checked?0x18212a:0x9dbac5)};
+document.querySelector('#saveCar').onclick=()=>{player.children[0].material.color.set(carColor);persist();document.querySelector('#garage').classList.add('hidden')};
+document.querySelector('[data-open="garage"]').addEventListener('click',renderGarage);
+renderGarage();
+document.querySelector('#money').textContent=money;
+
+// Original generated electronic shaabi-style loop using Web Audio (no external copyrighted recording)
+let audioCtx=null,master=null,beatTimer=null,beatStep=0;
+function audioInit(){if(audioCtx)return;audioCtx=new (window.AudioContext||window.webkitAudioContext)();master=audioCtx.createGain();master.gain.value=Number(document.querySelector('#volume').value);master.connect(audioCtx.destination)}
+function tone(freq,dur,type='sine',gain=.12){if(!audioCtx)return;let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(gain,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);o.connect(g);g.connect(master);o.start();o.stop(audioCtx.currentTime+dur)}
+function startBeat(){audioInit();if(beatTimer)return;beatTimer=setInterval(()=>{if(!document.querySelector('#musicToggle').checked||!playing)return;let s=beatStep++%8;if(s%4===0)tone(75,.13,'sine',.28);if(s===2||s===6)tone(180,.06,'triangle',.12);if(s%2===1)tone(850,.035,'square',.035);if(s===3||s===7)tone(420,.07,'sawtooth',.04)},170)}
+document.querySelector('#musicToggle').onchange=()=>{if(document.querySelector('#musicToggle').checked)startBeat()};document.querySelector('#volume').oninput=e=>{if(master)master.gain.value=Number(e.target.value)};
+document.querySelector('#startBtn').addEventListener('click',()=>{audioInit();startBeat()},{once:true});
+document.querySelector('#againBtn').addEventListener('click',()=>{audioInit();startBeat()});
+document.querySelector('#sfxToggle').onchange=()=>{};
+document.querySelector('#loading').style.opacity='0';setTimeout(()=>document.querySelector('#loading').remove(),550);

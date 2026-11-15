@@ -1,67 +1,83 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <meta name="theme-color" content="#08131f">
-  <title>مشوار مصر | لعبة قيادة مصرية</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#071321" />
+  <title>Egypt Drive 3D</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="game"></div>
-  <div class="vignette"></div>
+  <div id="loading"><div class="loader"></div><h2>EGYPT DRIVE 3D</h2><p>بنجهز الطريق يا باشا...</p></div>
+  <canvas id="game"></canvas>
 
   <header class="topbar">
-    <div class="brand"><span class="brand-mark">م</span><div><b>مشوار مصر</b><small>طريقك… حكايتك</small></div></div>
-    <div class="wallet"><span>جنيه</span><b id="money">250</b><span class="coin">◆</span></div>
-    <button class="icon-btn" id="pauseBtn" aria-label="إيقاف مؤقت">Ⅱ</button>
+    <div class="brand"><span class="flag">🇪🇬</span><div><b>EGYPT DRIVE</b><small>اسكندرية في القلب</small></div></div>
+    <div class="hud">
+      <div class="pill">💰 <b id="money">0</b></div>
+      <div class="pill">🏁 <b id="distance">0</b> م</div>
+      <button id="pauseBtn" class="iconbtn" aria-label="إيقاف">Ⅱ</button>
+    </div>
   </header>
 
-  <section class="hud">
-    <div class="speed-card"><strong id="speed">0</strong><small>كم / س</small></div>
-    <div class="distance-card"><small>المسافة</small><b id="distance">0.0 كم</b></div>
-    <div class="mission-card"><small>هدف المشوار</small><b id="mission">اجمع 100 جنيه</b></div>
+  <section id="menu" class="screen">
+    <div class="hero">
+      <div class="eyebrow">عيش أجواء الطريق المصري</div>
+      <h1>يلا بينا<br><span>على إسكندرية!</span></h1>
+      <p>سوق، اجمع فلوس، افتح عربيات ولف على الكورنيش.</p>
+      <button id="startBtn" class="primary">ابدأ السواقة <span>←</span></button>
+      <div class="mini-stats"><span>🚕 تكاتك</span><span>🚚 نص نقل</span><span>🌊 كورنيش</span></div>
+    </div>
+    <div class="menu-actions">
+      <button class="tile" data-open="garage">🚘 <b>الجراج</b><small>عربياتك وتعديلها</small></button>
+      <button class="tile" data-open="shop">🛒 <b>المتجر</b><small>عربيات وطرق جديدة</small></button>
+      <button class="tile" data-open="sound">🔊 <b>الصوت</b><small>موسيقى ومؤثرات</small></button>
+    </div>
   </section>
 
-  <div class="toast" id="toast"></div>
-
-  <section class="start-screen panel" id="startScreen">
-    <div class="eyebrow">أهلاً بيك في الشارع المصري</div>
-    <h1>اربط الحزام…<br><em>وانزل الطريق!</em></h1>
-    <p>سوق على طريق مصر–إسكندرية الصحراوي، تفادى التكاتك والنقل، واجمع الفلوس عشان تطوّر عربيتك.</p>
-    <div class="start-stats"><span>🚕 حركة مرور مصرية</span><span>🪙 مكافآت وجراج</span><span>🌊 كورنيش إسكندرية</span></div>
-    <button class="primary" id="startBtn">ابدأ المشوار <span>←</span></button>
-    <small class="hint">التحكم: الأسهم أو A / D — وعلى الهاتف اسحب يمين وشمال</small>
+  <section id="garage" class="panel hidden">
+    <button class="close">✕</button><h2>🚘 الجراج</h2>
+    <div class="car-preview" id="garageCar">🚗</div>
+    <h3 id="selectedCarName">فيات 128</h3>
+    <label>اختار عربيتك <select id="equippedCar"></select></label>
+    <div class="statline">السرعة <span>■■■■□□</span> التحمل</div>
+    <label>لون العربية <input type="color" id="carColor" value="#d92727"></label>
+    <label class="switchrow">تضليل الزجاج <input type="checkbox" id="tint"></label>
+    <label>شكل الجنوط
+      <select id="rims"><option value="classic">كلاسيك</option><option value="sport">رياضي</option></select>
+    </label>
+    <button id="saveCar" class="primary full">حفظ التعديلات</button>
   </section>
 
-  <section class="panel menu-panel hidden" id="menuPanel">
-    <button class="close" data-close>×</button>
-    <div class="eyebrow">اختار مشوارك</div><h2 id="panelTitle">الجراج والمتجر</h2>
-    <div id="panelContent"></div>
+  <section id="shop" class="panel hidden">
+    <button class="close">✕</button><h2>🛒 المتجر المصري</h2>
+    <div class="balance">رصيدك: 💰 <b class="moneyInline">0</b></div>
+    <h3>العربيات</h3><div id="carShop" class="shoplist"></div>
+    <h3>الطرق</h3><div id="roadShop" class="shoplist"></div>
   </section>
 
-  <nav class="bottom-nav">
-    <button data-panel="garage"><span>🚘</span>الجراج</button>
-    <button data-panel="shop"><span>🛒</span>المتجر</button>
-    <button data-panel="maps"><span>🗺️</span>الطرق</button>
-    <button data-panel="sound"><span>🔊</span>الصوت</button>
-  </nav>
+  <section id="sound" class="panel hidden">
+    <button class="close">✕</button><h2>🔊 إعدادات الصوت</h2>
+    <p>موسيقى إيقاعية أصلية مولدة داخل اللعبة، وليست تسجيلات مهرجانات تجارية.</p>
+    <label class="switchrow">تشغيل الإيقاع <input type="checkbox" id="musicToggle" checked></label>
+    <label class="switchrow">مؤثرات الطريق <input type="checkbox" id="sfxToggle" checked></label>
+    <label>مستوى الصوت <input id="volume" type="range" min="0" max="1" step=".05" value=".35"></label>
+  </section>
 
-  <div class="touch-controls" id="touchControls">
+  <div id="gameover" class="screen hidden">
+    <div class="result"><div class="eyebrow">مشوار جامد يا سواق</div><h2>خبطت يا معلم! 😅</h2>
+      <p>المسافة: <b id="finalDistance">0</b> متر</p><p>المكافأة: 💰 <b id="earned">0</b></p>
+      <button id="againBtn" class="primary">جولة جديدة</button><button id="homeBtn" class="secondary">القائمة الرئيسية</button>
+    </div>
+  </div>
+
+  <div id="pause" class="pausebox hidden"><h2>استراحة سواقين ☕</h2><button id="resumeBtn" class="primary">كمّل الطريق</button><button id="quitBtn" class="secondary">القائمة الرئيسية</button></div>
+
+  <div id="touchControls" class="touch-controls">
     <button id="leftBtn">◀</button><button id="rightBtn">▶</button>
+    <button id="brakeBtn"> торм<br>فرامل</button>
   </div>
-
-  <div class="pause-screen hidden" id="pauseScreen">
-    <div class="panel pause-panel"><div class="eyebrow">استراحة محارب</div><h2>واقف على جنب؟</h2>
-      <button class="primary" id="resumeBtn">كمّل المشوار</button>
-      <button class="secondary" id="restartBtn">ابدأ من جديد</button>
-    </div>
-  </div>
-  <div class="gameover hidden" id="gameOver">
-    <div class="panel pause-panel"><div class="eyebrow">المشوار خلص</div><h2>سلامتك يا سواق!</h2><p id="resultText">جمعت 0 جنيه</p>
-      <button class="primary" id="againBtn">مشوار جديد</button>
-    </div>
-  </div>
+  <div class="desktop-hint">A / ← يسار &nbsp; D / → يمين &nbsp; Space فرامل</div>
 
   <script type="module" src="game.js"></script>
 </body>
