@@ -1,84 +1,78 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="theme-color" content="#071321" />
-  <title>Egypt Drive 3D</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111318">
+  <meta name="description" content="كتالوج منتجات HB GROUP — Red Bull, Rauch, Nutella, Ferrero Rocher, Raffaello">
+  <title>HB GROUP | كتالوج المنتجات</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="loading"><div class="loader"></div><h2>EGYPT DRIVE 3D</h2><p>بنجهز الطريق يا باشا...</p></div>
-  <canvas id="game"></canvas>
-
   <header class="topbar">
-    <div class="brand"><span class="flag">🇪🇬</span><div><b>EGYPT DRIVE</b><small>اسكندرية في القلب</small></div></div>
-    <div class="hud">
-      <div class="pill">💰 <b id="money">0</b></div>
-      <div class="pill">🏁 <b id="distance">0</b> م</div>
-      <button id="pauseBtn" class="iconbtn" aria-label="إيقاف">Ⅱ</button>
-    </div>
+    <a class="brand" href="#" aria-label="HB GROUP الصفحة الرئيسية">
+      <span class="brand-mark">HB</span>
+      <span><b>HB GROUP</b><small>PRODUCTS CATALOG</small></span>
+    </a>
+    <nav class="nav-links">
+      <a href="#brands">الشركات</a><a href="#catalog">المنتجات</a><a href="#about">عن الكتالوج</a>
+    </nav>
+    <button class="cart-button" id="cartToggle" type="button">السلة <span id="cartCount">0</span></button>
   </header>
 
-  <section id="menu" class="screen">
-    <div class="hero">
-      <div class="eyebrow">عيش أجواء الطريق المصري</div>
-      <h1>يلا بينا<br><span>على إسكندرية!</span></h1>
-      <p>سوق، اجمع فلوس، افتح عربيات ولف على الكورنيش.</p>
-      <button id="startBtn" class="primary">ابدأ السواقة <span>←</span></button>
-      <div class="mini-stats"><span>🚕 تكاتك</span><span>🚚 نص نقل</span><span>🌊 كورنيش</span></div>
-    </div>
-    <div class="menu-actions">
-      <button class="tile" data-open="garage">🚘 <b>الجراج</b><small>عربياتك وتعديلها</small></button>
-      <button class="tile" data-open="shop">🛒 <b>المتجر</b><small>عربيات وطرق جديدة</small></button>
-      <button class="tile" data-open="sound">🔊 <b>الصوت</b><small>موسيقى ومؤثرات</small></button>
-    </div>
-  </section>
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow">HB GROUP • PRODUCT COLLECTION</span>
+        <h1>اختيارات مميزة،<br><em>في مكان واحد.</em></h1>
+        <p>استكشف مجموعة من أشهر منتجات المشروبات والحلويات، واعثر على الصنف المناسب بسهولة.</p>
+        <a class="hero-cta" href="#catalog">تصفح المنتجات <span>←</span></a>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="hero-tile tile-red">RED<br>BULL</div>
+        <div class="hero-tile tile-gold">FERRERO<br>ROCHER</div>
+        <div class="hero-tile tile-green">nutella</div>
+        <div class="hero-tile tile-orange">RAUCH</div>
+      </div>
+      <div class="hero-bottom"><span>CURATED BRANDS</span><span>01 — 05</span><span>SCROLL TO EXPLORE ↓</span></div>
+    </section>
 
-  <section id="garage" class="panel hidden">
-    <button class="close">✕</button><h2>🚘 الجراج</h2>
-    <div class="car-preview" id="garageCar">🚗</div>
-    <h3 id="selectedCarName">فيات 128</h3>
-    <label>اختار عربيتك <select id="equippedCar"></select></label>
-    <div class="statline">السرعة <span>■■■■□□</span> التحمل</div>
-    <label>لون العربية <input type="color" id="carColor" value="#d92727"></label>
-    <label class="switchrow">تضليل الزجاج <input type="checkbox" id="tint"></label>
-    <label>شكل الجنوط
-      <select id="rims"><option value="classic">كلاسيك</option><option value="sport">رياضي</option></select>
-    </label>
-    <button id="saveCar" class="primary full">حفظ التعديلات</button>
-  </section>
+    <section class="brand-section" id="brands">
+      <div class="section-heading"><div><span class="eyebrow">OUR BRANDS</span><h2>تعرّف على العلامات</h2></div><p>اختر العلامة التجارية لعرض منتجاتها.</p></div>
+      <div class="brand-grid" id="brandGrid"></div>
+    </section>
 
-  <section id="shop" class="panel hidden">
-    <button class="close">✕</button><h2>🛒 المتجر المصري</h2>
-    <div class="balance">رصيدك: 💰 <b class="moneyInline">0</b></div>
-    <h3>العربيات</h3><div id="carShop" class="shoplist"></div>
-    <h3>الطرق</h3><div id="roadShop" class="shoplist"></div>
-  </section>
+    <section class="catalog-section" id="catalog">
+      <div class="section-heading"><div><span class="eyebrow">THE COLLECTION</span><h2>كتالوج المنتجات</h2></div><div class="catalog-count" id="resultCount">— صنف</div></div>
+      <div class="toolbar">
+        <label class="search-wrap"><span>⌕</span><input id="searchInput" type="search" placeholder="ابحث عن منتج أو نكهة..." autocomplete="off"></label>
+        <select id="brandFilter" aria-label="تصفية حسب الشركة"><option value="all">كل الشركات</option></select>
+        <select id="sortFilter" aria-label="ترتيب المنتجات"><option value="featured">الترتيب الافتراضي</option><option value="low">السعر: الأقل أولاً</option><option value="high">السعر: الأعلى أولاً</option><option value="name">الاسم: أ-ي</option></select>
+      </div>
+      <div class="category-chips" id="categoryChips"></div>
+      <div class="product-grid" id="productGrid"></div>
+      <div class="empty-state" id="emptyState" hidden>لا توجد منتجات مطابقة لبحثك. جرّب كلمة أخرى.</div>
+    </section>
 
-  <section id="sound" class="panel hidden">
-    <button class="close">✕</button><h2>🔊 إعدادات الصوت</h2>
-    <p>موسيقى إيقاعية أصلية مولدة داخل اللعبة، وليست تسجيلات مهرجانات تجارية.</p>
-    <label class="switchrow">تشغيل الإيقاع <input type="checkbox" id="musicToggle" checked></label>
-    <label class="switchrow">مؤثرات الطريق <input type="checkbox" id="sfxToggle" checked></label>
-    <label>مستوى الصوت <input id="volume" type="range" min="0" max="1" step=".05" value=".35"></label>
-  </section>
+    <section class="about-section" id="about">
+      <div><span class="eyebrow">A NOTE ABOUT PRICES</span><h2>معلومات واضحة<br>قبل اتخاذ القرار.</h2></div>
+      <div class="about-copy">
+        <p>الأسعار المعروضة بالدولار الأمريكي هي <b>أسعار مرجعية تقديرية</b> لأغراض عرض الكتالوج، وليست عرض بيع ملزماً أو تسعيرة رسمية من الشركات المصنّعة. تختلف الأسعار حسب الدولة، حجم العبوة، المتجر، الضرائب، الشحن وتاريخ التحديث.</p>
+        <p>يمكن تعديل بيانات الأصناف وأسعارها بسهولة من ملف <code>script.js</code> قبل نشر الموقع.</p>
+      </div>
+    </section>
+  </main>
 
-  <div id="gameover" class="screen hidden">
-    <div class="result"><div class="eyebrow">مشوار جامد يا سواق</div><h2>خبطت يا معلم! 😅</h2>
-      <p>المسافة: <b id="finalDistance">0</b> متر</p><p>المكافأة: 💰 <b id="earned">0</b></p>
-      <button id="againBtn" class="primary">جولة جديدة</button><button id="homeBtn" class="secondary">القائمة الرئيسية</button>
-    </div>
-  </div>
+  <footer><span class="footer-logo">HB GROUP</span><span>© <span id="year"></span> — جميع الحقوق محفوظة</span><span>كتالوج عرض المنتجات</span></footer>
 
-  <div id="pause" class="pausebox hidden"><h2>استراحة سواقين ☕</h2><button id="resumeBtn" class="primary">كمّل الطريق</button><button id="quitBtn" class="secondary">القائمة الرئيسية</button></div>
-
-  <div id="touchControls" class="touch-controls">
-    <button id="leftBtn">◀</button><button id="rightBtn">▶</button>
-    <button id="brakeBtn"> торм<br>فرامل</button>
-  </div>
-  <div class="desktop-hint">A / ← يسار &nbsp; D / → يمين &nbsp; Space فرامل</div>
-
-  <script type="module" src="game.js"></script>
+  <aside class="cart-drawer" id="cartDrawer" aria-label="سلة المنتجات" aria-hidden="true">
+    <div class="drawer-head"><h3>قائمة اختياراتك</h3><button id="cartClose" aria-label="إغلاق">×</button></div>
+    <div id="cartItems" class="cart-items"><p class="cart-empty">لم تضف أي منتجات بعد.</p></div>
+    <div class="cart-total"><span>الإجمالي التقديري</span><b id="cartTotal">$0.00</b></div>
+    <p class="cart-note">هذه قائمة اختيار وليست عملية شراء أو طلب دفع.</p>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <script src="script.js"></script>
 </body>
 </html>
