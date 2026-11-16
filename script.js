@@ -1,120 +1,33 @@
-// بيانات الكتالوج: الأسعار بالدولار الأمريكي وهي قيم مرجعية تقديرية قابلة للتعديل.
+// HB GROUP demo storefront. Product packshot URLs are linked to their source pages.
 const products = [
-  // RED BULL
-  {id:1,brand:"Red Bull",name:"Red Bull Original",detail:"عبوة 250 مل",category:"مشروبات الطاقة",price:2.49,style:"red",symbol:"RED BULL"},
-  {id:2,brand:"Red Bull",name:"Red Bull Sugarfree",detail:"بدون سكر • 250 مل",category:"مشروبات الطاقة",price:2.49,style:"red",symbol:"SUGARFREE"},
-  {id:3,brand:"Red Bull",name:"Red Bull Zero",detail:"بدون سكر • 250 مل",category:"مشروبات الطاقة",price:2.49,style:"red",symbol:"ZERO"},
-  {id:4,brand:"Red Bull",name:"Red Edition Watermelon",detail:"نكهة البطيخ • 250 مل",category:"إصدارات ونكهات",price:2.69,style:"red",symbol:"RED EDITION"},
-  {id:5,brand:"Red Bull",name:"Blue Edition",detail:"نكهة التوت • 250 مل",category:"إصدارات ونكهات",price:2.69,style:"red",symbol:"BLUE EDITION"},
-  {id:6,brand:"Red Bull",name:"Yellow Edition",detail:"نكهة الفواكه الاستوائية • 250 مل",category:"إصدارات ونكهات",price:2.69,style:"orange",symbol:"YELLOW"},
-  {id:7,brand:"Red Bull",name:"Green Edition",detail:"نكهة فاكهة التنين • 250 مل",category:"إصدارات ونكهات",price:2.69,style:"green",symbol:"GREEN"},
-  {id:8,brand:"Red Bull",name:"Red Bull 355 ml",detail:"العبوة الكبيرة • 355 مل",category:"أحجام مختلفة",price:3.49,style:"red",symbol:"RED BULL"},
-  // RAUCH
-  {id:9,brand:"Rauch",name:"Happy Day Orange",detail:"عصير برتقال • 1 لتر",category:"عصائر",price:3.25,style:"orange",symbol:"HAPPY DAY"},
-  {id:10,brand:"Rauch",name:"Happy Day Apple",detail:"عصير تفاح • 1 لتر",category:"عصائر",price:3.25,style:"green",symbol:"HAPPY DAY"},
-  {id:11,brand:"Rauch",name:"Happy Day Mango",detail:"عصير مانجو • 1 لتر",category:"عصائر",price:3.65,style:"orange",symbol:"HAPPY DAY"},
-  {id:12,brand:"Rauch",name:"Happy Day Pineapple",detail:"عصير أناناس • 1 لتر",category:"عصائر",price:3.65,style:"orange",symbol:"HAPPY DAY"},
-  {id:13,brand:"Rauch",name:"Happy Day Multivitamin",detail:"كوكتيل فواكه وفيتامينات • 1 لتر",category:"عصائر",price:3.65,style:"orange",symbol:"MULTI"},
-  {id:14,brand:"Rauch",name:"Bravo Orange",detail:"مشروب فواكه • 1.5 لتر",category:"مشروبات فواكه",price:2.75,style:"orange",symbol:"BRAVO"},
-  {id:15,brand:"Rauch",name:"Bravo Multivitamin",detail:"مشروب متعدد الفواكه • 1.5 لتر",category:"مشروبات فواكه",price:2.75,style:"orange",symbol:"BRAVO"},
-  {id:16,brand:"Rauch",name:"Yippy Juice",detail:"مشروب فواكه للأطفال • 200 مل",category:"منتجات الأطفال",price:1.15,style:"green",symbol:"YIPPY"},
-  {id:17,brand:"Rauch",name:"MyTea Peach",detail:"شاي مثلج بالخوخ • 500 مل",category:"شاي مثلج",price:1.85,style:"orange",symbol:"MY TEA"},
-  {id:18,brand:"Rauch",name:"MyTea Lemon",detail:"شاي مثلج بالليمون • 500 مل",category:"شاي مثلج",price:1.85,style:"green",symbol:"MY TEA"},
-  // NUTELLA
-  {id:19,brand:"Nutella",name:"Nutella 200g",detail:"كريمة البندق والكاكاو",category:"أحجام مختلفة",price:3.49,style:"green",symbol:"nutella"},
-  {id:20,brand:"Nutella",name:"Nutella 350g",detail:"كريمة البندق والكاكاو",category:"أحجام مختلفة",price:5.49,style:"green",symbol:"nutella"},
-  {id:21,brand:"Nutella",name:"Nutella 400g",detail:"كريمة البندق والكاكاو",category:"أحجام مختلفة",price:5.99,style:"green",symbol:"nutella"},
-  {id:22,brand:"Nutella",name:"Nutella 750g",detail:"العبوة العائلية",category:"أحجام مختلفة",price:9.49,style:"green",symbol:"nutella"},
-  {id:23,brand:"Nutella",name:"Nutella B-Ready",detail:"ويفر محشو • عبوة فردية",category:"سناكس وويفر",price:1.25,style:"gold",symbol:"B-READY"},
-  {id:24,brand:"Nutella",name:"Nutella Biscuits",detail:"بسكويت محشو • عبوة 304 جم",category:"سناكس وويفر",price:4.99,style:"gold",symbol:"BISCUITS"},
-  // FERRERO ROCHER
-  {id:25,brand:"Ferrero Rocher",name:"Ferrero Rocher 3 Pieces",detail:"عبوة 3 قطع",category:"عبوات الشوكولاتة",price:2.49,style:"gold",symbol:"FERRERO"},
-  {id:26,brand:"Ferrero Rocher",name:"Ferrero Rocher 8 Pieces",detail:"علبة 8 قطع",category:"عبوات الشوكولاتة",price:5.49,style:"gold",symbol:"ROCHER"},
-  {id:27,brand:"Ferrero Rocher",name:"Ferrero Rocher 16 Pieces",detail:"علبة 16 قطعة",category:"عبوات الشوكولاتة",price:10.97,style:"gold",symbol:"ROCHER"},
-  {id:28,brand:"Ferrero Rocher",name:"Ferrero Rocher 24 Pieces",detail:"علبة 24 قطعة",category:"عبوات الشوكولاتة",price:14.49,style:"gold",symbol:"ROCHER"},
-  {id:29,brand:"Ferrero Rocher",name:"Ferrero Rocher 42 Pieces",detail:"علبة 42 قطعة",category:"عبوات الشوكولاتة",price:19.98,style:"gold",symbol:"ROCHER"},
-  {id:30,brand:"Ferrero Rocher",name:"Rocher Dark",detail:"شوكولاتة داكنة بالبندق",category:"إصدارات خاصة",price:7.49,style:"gold",symbol:"DARK"},
-  {id:31,brand:"Ferrero Rocher",name:"Rocher Chocolate Bar",detail:"لوح شوكولاتة بالبندق • 90 جم",category:"ألواح الشوكولاتة",price:4.34,style:"gold",symbol:"ROCHER BAR"},
-  // RAFFAELLO
-  {id:32,brand:"Raffaello",name:"Raffaello 3 Pieces",detail:"عبوة 3 قطع",category:"عبوات جوز الهند",price:2.25,style:"cream",symbol:"RAFFAELLO"},
-  {id:33,brand:"Raffaello",name:"Raffaello 6 Pieces",detail:"علبة 6 قطع",category:"عبوات جوز الهند",price:4.49,style:"cream",symbol:"RAFFAELLO"},
-  {id:34,brand:"Raffaello",name:"Raffaello 15 Pieces",detail:"علبة 15 قطعة • 150 جم تقريباً",category:"عبوات جوز الهند",price:7.99,style:"cream",symbol:"RAFFAELLO"},
-  {id:35,brand:"Raffaello",name:"Raffaello 24 Pieces",detail:"علبة هدايا 24 قطعة",category:"عبوات جوز الهند",price:12.99,style:"cream",symbol:"RAFFAELLO"}
+ {id:1,brand:'Red Bull',name:'ريد بول الأصلي',size:'عبوة 250 مل',category:'مشروبات الطاقة',price:1.99,image:'https://www.liquorland.co.nz/content/products/red-bull-can-250ml-90162602-19913.jpg?auto=webp&canvas=1%3A1&fit=bounds&height=1440&optimize=high&width=1440',source:'https://www.liquorland.co.nz/red-bull-can-250ml-90162602',badge:'الأكثر شهرة'},
+ {id:2,brand:'Red Bull',name:'ريد بول بدون سكر Sugarfree',size:'عبوة 250 مل',category:'مشروبات الطاقة',price:1.99,image:'https://www.continente.pt/on/demandware.static/-/Sites-col-master-catalog/default/dw0d26cbac/images/col/274/2747592-hero.png',source:'https://www.continente.pt/produto/bebida-energetica-em-lata-gaseificada-sem-acucar-red-bull-red-bull-2747592.html'},
+ {id:3,brand:'Rauch',name:'Rauch Happy Day مشمش',size:'عبوة 1 لتر',category:'العصائر',price:2.49,image:'https://orient.sercdn.com/resimler/3a0749cc91a31c24f41f2257cd816e24-66ad4ef735548.png',source:'https://shop.orient.at/tr/product/happy-day-marille-1l--31932'},
+ {id:4,brand:'Rauch',name:'Rauch Happy Day برتقال',size:'عبوة 1 لتر',category:'العصائر',price:2.49,image:'https://acemarket.ph/cdn/shop/products/E-comm-HappyDayOrange-1L_9e0a2e43-9fe1-4526-851b-9ce7a206ec48.jpg?v=1740979542',source:'https://acemarket.ph/products/happy-day-orange-juice-1l'},
+ {id:5,brand:'Nutella',name:'نوتيلا شوكولاتة بالبندق',size:'برطمان 350 جم',category:'الشوكولاتة القابلة للدهن',price:4.49,image:'https://assets.iceland.co.uk/i/iceland/nutella_hazelnut_chocolate_spread_jar_350g_63272_T596.jpg?fmt=auto%24pdpmain_2x%24',source:'https://www.iceland.co.uk/p/nutella-hazelnut-chocolate-spread-jar-350g/63272.html',badge:'منتج أساسي'},
+ {id:6,brand:'Nutella',name:'Nutella Biscuits',size:'كيس 304 جم',category:'البسكويت',price:4.99,image:'https://www.amuse-bouche.shop/cdn/shop/products/8000500310427_PHOTOSITE_20210531_163819_0_1445x.jpg?v=1632481457',source:'https://www.amuse-bouche.shop/products/nutella-biscuits-resealable-bag'},
+ {id:7,brand:'Ferrero Rocher',name:'فيريرو روشيه علبة 8 قطع',size:'100 جم',category:'الشوكولاتة والحلويات',price:5.49,image:'https://www.ferrerorocher.com/ec/sites/ferrerorocher20_ec/files/2022-11/t8-main-2.png?t=1712591117',source:'https://www.ferrerorocher.com/int/en/our-products/ferrero-rocher'},
+ {id:8,brand:'Ferrero Rocher',name:'فيريرو روشيه علبة 16 قطعة',size:'200 جم',category:'الشوكولاتة والحلويات',price:9.49,image:'https://cdn.knuspr.de/images/grocery/products/1083/1083-1629126288176.jpg',source:'https://www.knuspr.de/1083-ferrero-rocher',badge:'علبة هدايا'},
+ {id:9,brand:'Raffaello',name:'رافايلو علبة 15 قطعة',size:'150 جم',category:'الشوكولاتة والحلويات',price:8.49,image:'https://images.migrosone.com/sanalmarket/product/07040240/7040240-dfaa07-1650x1650.jpg',source:'https://www.migros.com.tr/raffaello-150-g-p-6b6cf0',badge:'علبة مميزة'},
+ {id:10,brand:'Raffaello',name:'رافايلو Confetteria',size:'علبة تشكيلة',category:'الشوكولاتة والحلويات',price:10.99,image:'https://www.ferrero.com/sk/sites/ferrero_sk/files/styles/width_1440/public/2025-01/raffaello_t15_0.png?t=1753443840',source:'https://www.ferrero.com/sk/sk/nase-znacky/raffaello'}
 ];
-
-const brandInfo = [
-  {name:"Red Bull",desc:"مشروبات الطاقة",className:"red"},
-  {name:"Rauch",desc:"العصائر والمشروبات",className:"orange"},
-  {name:"Nutella",desc:"كريمة البندق والكاكاو",className:"green"},
-  {name:"Ferrero Rocher",desc:"شوكولاتة فاخرة",className:"gold"},
-  {name:"Raffaello",desc:"حلوى اللوز وجوز الهند",className:"cream"}
-];
-const $ = s => document.querySelector(s);
-let activeBrand = "all", activeCategory = "all";
-const cart = new Map();
-
-function renderBrands(){
-  $("#brandGrid").innerHTML = brandInfo.map(b=>`
-    <button class="brand-card ${activeBrand===b.name?'active':''}" data-brand="${b.name}">
-      <span class="brand-name">${b.name}</span><small>${b.desc}</small><span class="arrow">↙</span>
-    </button>`).join("");
-  $("#brandFilter").innerHTML = '<option value="all">كل الشركات</option>' + brandInfo.map(b=>`<option value="${b.name}">${b.name}</option>`).join("");
-}
-function filteredProducts(){
-  const q=$("#searchInput").value.trim().toLowerCase();
-  let list=products.filter(p=>(activeBrand==="all"||p.brand===activeBrand)&&
-    (activeCategory==="all"||p.category===activeCategory)&&
-    (!q||[p.name,p.brand,p.detail,p.category].join(" ").toLowerCase().includes(q)));
-  const sort=$("#sortFilter").value;
-  if(sort==="low") list.sort((a,b)=>a.price-b.price);
-  if(sort==="high") list.sort((a,b)=>b.price-a.price);
-  if(sort==="name") list.sort((a,b)=>a.name.localeCompare(b.name));
-  return list;
-}
-function renderCategories(){
-  const cats=[...new Set(products.filter(p=>activeBrand==="all"||p.brand===activeBrand).map(p=>p.category))];
-  if(activeCategory!=="all"&&!cats.includes(activeCategory)) activeCategory="all";
-  $("#categoryChips").innerHTML=['all',...cats].map(c=>`<button class="chip ${activeCategory===c?'active':''}" data-category="${c}">${c==="all"?"كل الأصناف":c}</button>`).join("");
-}
-function renderProducts(){
-  const list=filteredProducts();
-  $("#resultCount").textContent=`${list.length} صنف`;
-  $("#productGrid").innerHTML=list.map(p=>`
-    <article class="product-card">
-      <div class="product-visual ${p.style}"><span class="product-tag">${p.brand}</span><span class="product-symbol">${p.symbol}</span></div>
-      <div class="product-info"><span class="product-brand">${p.brand.toUpperCase()}</span><h3>${p.name}</h3><p>${p.detail}</p>
-        <div class="product-bottom"><span class="price">$${p.price.toFixed(2)} <small>/ القطعة</small></span>
-        <button class="add-button" data-add="${p.id}" aria-label="أضف ${p.name} إلى القائمة">+</button></div>
-      </div>
-    </article>`).join("");
-  $("#emptyState").hidden=list.length!==0;
-}
-function refresh(){renderBrands();renderCategories();renderProducts();}
-function renderCart(){
-  const items=[...cart.entries()].map(([id,qty])=>({product:products.find(p=>p.id===id),qty})).filter(x=>x.product);
-  $("#cartCount").textContent=items.reduce((s,x)=>s+x.qty,0);
-  $("#cartItems").innerHTML=items.length?items.map(({product:p,qty})=>`
-    <div class="cart-row"><div><b>${p.name}</b><small>$${p.price.toFixed(2)} × ${qty}</small></div>
-    <div class="qty-controls"><button data-qty="${p.id}" data-delta="-1">−</button><span>${qty}</span><button data-qty="${p.id}" data-delta="1">+</button></div></div>`).join(""):'<p class="cart-empty">لم تضف أي منتجات بعد.</p>';
-  const total=items.reduce((s,x)=>s+x.product.price*x.qty,0);
-  $("#cartTotal").textContent=`$${total.toFixed(2)}`;
-}
-function openCart(open){$("#cartDrawer").classList.toggle("open",open);$("#scrim").classList.toggle("show",open);$("#cartDrawer").setAttribute("aria-hidden",String(!open));}
-document.addEventListener("click",e=>{
-  const brand=e.target.closest("[data-brand]");
-  if(brand){activeBrand=brand.dataset.brand;activeCategory="all";$("#brandFilter").value=activeBrand;refresh();$("#catalog").scrollIntoView({behavior:"smooth"});}
-  const chip=e.target.closest("[data-category]");
-  if(chip){activeCategory=chip.dataset.category;renderCategories();renderProducts();}
-  const add=e.target.closest("[data-add]");
-  if(add){const id=Number(add.dataset.add);cart.set(id,(cart.get(id)||0)+1);renderCart();add.textContent="✓";setTimeout(()=>add.textContent="+",650);}
-  const qty=e.target.closest("[data-qty]");
-  if(qty){const id=Number(qty.dataset.qty),n=(cart.get(id)||0)+Number(qty.dataset.delta);if(n<=0)cart.delete(id);else cart.set(id,n);renderCart();}
-});
-$("#searchInput").addEventListener("input",renderProducts);
-$("#sortFilter").addEventListener("change",renderProducts);
-$("#brandFilter").addEventListener("change",e=>{activeBrand=e.target.value;activeCategory="all";refresh();});
-$("#cartToggle").addEventListener("click",()=>openCart(true));
-$("#cartClose").addEventListener("click",()=>openCart(false));
-$("#scrim").addEventListener("click",()=>openCart(false));
-$("#year").textContent=new Date().getFullYear();
-refresh();renderCart();
+const brands=['Red Bull','Rauch','Nutella','Ferrero Rocher','Raffaello'];
+const state={cart:JSON.parse(localStorage.getItem('hb_cart')||'{}')};
+const $=id=>document.getElementById(id);const money=n=>'$'+Number(n).toFixed(2);
+const grid=$('products'),brandFilter=$('brandFilter'),categoryFilter=$('categoryFilter');
+brands.forEach(b=>{brandFilter.add(new Option(b,b));});
+$('brandChips').innerHTML=`<button class="brand-chip active" data-brand="all">كل العلامات</button>`+brands.map(b=>`<button class="brand-chip" data-brand="${b}">${b}</button>`).join('');
+$('brandChips').addEventListener('click',e=>{const b=e.target.dataset.brand;if(!b)return;brandFilter.value=b;document.querySelectorAll('.brand-chip').forEach(x=>x.classList.toggle('active',x.dataset.brand===b));renderProducts();$('shop').scrollIntoView({behavior:'smooth'});});
+function renderProducts(){let q=$('search').value.trim().toLowerCase(),b=brandFilter.value,c=categoryFilter.value,s=$('sortFilter').value;let list=products.filter(p=>(b==='all'||p.brand===b)&&(c==='all'||p.category===c)&&`${p.brand} ${p.name} ${p.size}`.toLowerCase().includes(q));if(s==='low')list.sort((a,b)=>a.price-b.price);if(s==='high')list.sort((a,b)=>b.price-a.price);if(s==='name')list.sort((a,b)=>a.name.localeCompare(b.name,'ar'));$('productCount').textContent=`${list.length} منتج`;grid.innerHTML=list.length?list.map(p=>`<article class="product-card"><div class="product-image">${p.badge?`<span class="tag">${p.badge}</span>`:''}<img src="${p.image}" alt="${p.name} - ${p.size}" loading="lazy" onerror="this.onerror=null;this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22200%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23f5f2eb%22/%3E%3Ctext x=%22100%22 y=%22100%22 font-size=%2220%22 text-anchor=%22middle%22 fill=%22%23a58a54%22 font-family=%22Arial%22%3EHB GROUP%3C/text%3E%3C/svg%3E'"><a class="image-source" href="${p.source}" target="_blank" rel="noopener">مصدر الصورة ↗</a></div><div class="product-info"><span class="product-brand">${p.brand.toUpperCase()}</span><h3>${p.name}</h3><div class="product-meta">${p.size} • ${p.category}</div><div class="product-bottom"><div class="product-price">${money(p.price)} <small>USD</small></div><button class="add-btn" data-add="${p.id}">＋ أضف للسلة</button></div></div></article>`).join(''):'<div class="empty-state">لا توجد منتجات مطابقة لبحثك.</div>';grid.querySelectorAll('[data-add]').forEach(btn=>btn.addEventListener('click',()=>changeQty(+btn.dataset.add,1)));}
+function persist(){localStorage.setItem('hb_cart',JSON.stringify(state.cart));renderCart();}
+function changeQty(id,delta){let n=(state.cart[id]||0)+delta;if(n<=0)delete state.cart[id];else state.cart[id]=Math.min(99,n);persist();if(delta>0)toast('تمت إضافة المنتج إلى السلة');}
+function cartEntries(){return Object.entries(state.cart).map(([id,qty])=>({product:products.find(p=>p.id===+id),qty})).filter(x=>x.product);}
+function renderCart(){let entries=cartEntries(),count=entries.reduce((s,x)=>s+x.qty,0),total=entries.reduce((s,x)=>s+x.product.price*x.qty,0);$('cartCount').textContent=count;$('subtotal').textContent=money(total);$('checkoutTotal').textContent=money(total);$('cartItems').innerHTML=entries.length?entries.map(({product:p,qty})=>`<div class="cart-row"><img src="${p.image}" alt=""><div><h4>${p.name}</h4><small>${p.size} • ${money(p.price)} للقطعة</small><div class="qty-control"><button data-minus="${p.id}">−</button><b>${qty}</b><button data-plus="${p.id}">+</button><button class="remove-item" data-remove="${p.id}">حذف</button></div></div><b class="cart-row-price">${money(p.price*qty)}</b></div>`).join(''):'<div class="cart-empty">سلتك فارغة حالياً.<br>ابدأ بإضافة المنتجات التي تريدها.</div>';['minus','plus','remove'].forEach(action=>$('cartItems').querySelectorAll(`[data-${action}]`).forEach(btn=>btn.addEventListener('click',()=>{let id=+btn.dataset[action];if(action==='minus')changeQty(id,-1);else if(action==='plus')changeQty(id,1);else{delete state.cart[id];persist();}})));}
+function openCart(){ $('cartDrawer').classList.add('open');$('overlay').classList.add('open');$('cartDrawer').setAttribute('aria-hidden','false'); }
+function closeCart(){ $('cartDrawer').classList.remove('open');$('overlay').classList.remove('open');$('cartDrawer').setAttribute('aria-hidden','true'); }
+function toast(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),1900);}
+$('openCart').onclick=openCart;$('closeCart').onclick=closeCart;$('overlay').onclick=closeCart;$('search').oninput=renderProducts;brandFilter.onchange=()=>{document.querySelectorAll('.brand-chip').forEach(x=>x.classList.toggle('active',x.dataset.brand===brandFilter.value));renderProducts();};categoryFilter.onchange=renderProducts;$('sortFilter').onchange=renderProducts;
+$('checkoutBtn').onclick=()=>{if(!cartEntries().length){toast('أضف منتجاً إلى السلة أولاً');return;}closeCart();$('checkoutModal').classList.add('open');$('checkoutForm').hidden=false;$('orderResult').hidden=true;};$('closeCheckout').onclick=()=>$('checkoutModal').classList.remove('open');
+$('checkoutForm').addEventListener('submit',e=>{e.preventDefault();let data=new FormData(e.target),entries=cartEntries(),total=entries.reduce((s,x)=>s+x.product.price*x.qty,0);let lines=entries.map(x=>`- ${x.product.name} (${x.product.size}) × ${x.qty} = ${money(x.product.price*x.qty)}`).join('\n');let order=`طلب جديد — HB GROUP\nالاسم: ${data.get('name')}\nالهاتف: ${data.get('phone')}\nالمدينة: ${data.get('city')}\nالعنوان/ملاحظات: ${data.get('address')||'غير محدد'}\n\nالمنتجات:\n${lines}\n\nالإجمالي التقديري: ${money(total)}\nملاحظة: السعر والتوافر والشحن بحاجة إلى تأكيد من المتجر.`;$('orderText').value=order;$('checkoutForm').hidden=true;$('orderResult').hidden=false;});
+$('copyOrder').onclick=async()=>{try{await navigator.clipboard.writeText($('orderText').value);toast('تم نسخ ملخص الطلب');}catch{ $('orderText').select();document.execCommand('copy');toast('تم نسخ ملخص الطلب');}};
+$('year').textContent=new Date().getFullYear();renderProducts();renderCart();

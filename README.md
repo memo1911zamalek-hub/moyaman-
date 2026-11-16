@@ -1,25 +1,40 @@
-# HB GROUP — Product Catalog
+# HB GROUP — متجر إلكتروني تجريبي
 
-موقع كتالوج منتجات ثابت باستخدام HTML وCSS وJavaScript فقط، مناسب للنشر على GitHub Pages.
+متجر ثابت مبني بـ HTML وCSS وJavaScript، ومتوافق مع الهاتف والكمبيوتر وجاهز للنشر على GitHub Pages.
 
-## التشغيل
-1. فك ضغط الملف.
-2. افتح `index.html` في المتصفح.
-3. لتعديل أسماء المنتجات أو الأصناف أو الأسعار افتح `script.js` وعدّل مصفوفة `products`.
+## المزايا
+- أقسام للعلامات الخمس: Red Bull وRauch وNutella وFerrero Rocher وRaffaello.
+- صور لعبوات منتجات فعلية مرتبطة بمصادرها في بطاقة المنتج.
+- بحث وفلاتر حسب العلامة والقسم، وترتيب بالسعر والاسم.
+- سلة مشتريات مع تعديل الكميات والحذف، محفوظة محلياً في المتصفح.
+- نموذج بيانات عميل ينشئ ملخص طلب قابل للنسخ.
+
+## تشغيل الموقع
+افتح `index.html` في متصفح حديث. يتطلب اتصالاً بالإنترنت لتحميل الخطوط وصور المنتجات الخارجية.
 
 ## النشر على GitHub Pages
-1. أنشئ Repository جديداً على GitHub.
-2. ارفع الملفات الثلاثة `index.html` و`style.css` و`script.js` إلى المجلد الرئيسي.
-3. افتح Settings → Pages.
-4. من Build and deployment اختر Deploy from a branch، ثم `main` و`/(root)` واضغط Save.
-5. انتظر رابط النشر الذي سيظهر في صفحة Pages.
+1. أنشئ Repository جديداً.
+2. ارفع `index.html` و`style.css` و`script.js` وملف `README.md`.
+3. من Settings → Pages اختر Deploy from a branch.
+4. اختر `main` و`/(root)` ثم Save.
 
-## ملاحظة مهمة عن الأسعار
-الأسعار في هذا النموذج **مرجعية تقديرية بالدولار وليست قائمة أسعار رسمية أو أسعاراً مؤكدة في ليبيا**. السعر الفعلي يختلف حسب الدولة والموزع والعبوة والضرائب والشحن وتاريخ الشراء. يلزم مراجعة المورد المحلي وتحديث قيم `price` في `script.js` قبل اعتماد الكتالوج تجارياً.
+## تعديل المنتجات
+افتح `script.js` وعدّل مصفوفة `products`. خصائص المنتج هي: `id`, `brand`, `name`, `size`, `category`, `price`, `image`, `source`.
+الأسعار بالدولار تقديرية، عدّلها قبل الاستخدام التجاري وفق قائمة أسعارك الفعلية.
 
-للمقارنة فقط، ظهرت أسعار تجزئة أمريكية منشورة لبعض المنتجات مثل Red Bull 8.4 oz على CVS، وFerrero Rocher 16 قطعة على Walmart؛ لا يعني ذلك أن الأسعار نفسها تنطبق على ليبيا:
-- CVS Red Bull: https://www.cvs.com/shop/grocery/q/Red_Bull/br
-- Walmart Ferrero Rocher: https://www.walmart.com/brand/ferrero-rocher/10029966
-
-## العلامات التجارية
-يستخدم المشروع أسماء العلامات لأغراض تصنيف المنتجات. لا يتضمن شعارات رسمية أو ادعاءً بوجود وكالة أو شراكة أو اعتماد رسمي. اسم HB GROUP معروض كاسم الجهة المالكة للكتالوج بناءً على طلب صاحب المشروع.
+## ملاحظات تشغيلية وقانونية
+- هذا نموذج واجهة متجر Front-end فقط. السلة محفوظة في `localStorage` على جهاز الزائر ولا تصل إلى إدارة المتجر.
+- لا توجد بوابة دفع، مخزون، تسجيل دخول، قاعدة بيانات، أو إرسال طلبات إلى خادم. لا تستخدمه لقبول مدفوعات فعلية قبل إضافة Backend آمن وبوابة دفع مناسبة.
+- الصور روابط خارجية لمتاجر وصفحات منتجات/علامات تجارية؛ قد تتغير أو تمنع hotlink. استبدلها بصور تملك حق استخدامها، ويفضل حفظ صور مرخصة داخل مجلد `assets`.
+- صور المنتجات ومصادرها:
+  - Red Bull original: https://www.liquorland.co.nz/red-bull-can-250ml-90162602
+  - Red Bull Sugarfree: https://www.continente.pt/produto/bebida-energetica-em-lata-gaseificada-sem-acucar-red-bull-red-bull-2747592.html
+  - Rauch Happy Day apricot: https://shop.orient.at/tr/product/happy-day-marille-1l--31932
+  - Rauch Happy Day orange: https://acemarket.ph/products/happy-day-orange-juice-1l
+  - Nutella 350g: https://www.iceland.co.uk/p/nutella-hazelnut-chocolate-spread-jar-350g/63272.html
+  - Nutella Biscuits 304g: https://www.amuse-bouche.shop/products/nutella-biscuits-resealable-bag
+  - Ferrero Rocher 8 pieces: https://www.ferrerorocher.com/int/en/our-products/ferrero-rocher
+  - Ferrero Rocher 16 pieces: https://www.knuspr.de/1083-ferrero-rocher
+  - Raffaello 15 pieces: https://www.migros.com.tr/raffaello-150-g-p-6b6cf0
+  - Raffaello Confetteria: https://www.ferrero.com/sk/sk/nase-znacky/raffaello
+- HB GROUP مستخدم هنا كاسم وهوية بناءً على طلب صاحب المشروع؛ لا يشكل هذا الموقع إثباتاً لملكية الاسم أو وجود تفويض أو شراكة مع العلامات المذكورة.
